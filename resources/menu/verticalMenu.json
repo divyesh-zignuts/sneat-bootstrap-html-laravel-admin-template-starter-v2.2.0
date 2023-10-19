@@ -1,37 +1,243 @@
 {
   "menu": [
     {
-      "url": "/",
-      "name": "Home",
+      "name": "Dashboards",
       "icon": "menu-icon tf-icons bx bx-home-circle",
-      "slug": "pages-home"
+      "slug": "dashboard",
+      "submenu": [
+        {
+          "url": "/",
+          "name": "Home",
+          "slug": "pages-home"
+        },
+        {
+          "url": "dashboard/crm",
+          "name": "Advanced Dashborad",
+          "slug": "dashboard-advanced"
+        }
+      ]
     },
     {
-      "url": "/page-2",
-      "icon": "menu-icon tf-icons bx bx-file",
-      "name": "Page 2",
-      "slug": "pages-page-2"
-    },
-    {
-      "url": "/pages/misc-error",
-      "name": "Error",
-      "icon": "menu-icon tf-icons bx bx-error",
-      "slug": "pages-misc-error",
-      "target": "_blank"
-    },
-    {
-      "url": "/auth/login-basic",
-      "name": "Login",
-      "icon": "menu-icon tf-icons bx bx-log-in",
-      "slug": "auth-login-basic",
-      "target": "_blank"
-    },
-    {
-      "url": "/auth/register-basic",
-      "name": "Register",
+      "url": "/#",
       "icon": "menu-icon tf-icons bx bx-user",
-      "slug": "auth-register-basic",
-      "target": "_blank"
+      "name": "Leads",
+      "slug": "leads"
+    },
+    {
+      "url": "/#",
+      "icon": "menu-icon tf-icons bx bx-buildings",
+      "name": "Clients",
+      "slug": "clients"
+    },
+    {
+      "name": "Hr",
+      "icon": "menu-icon tf-icons bx bx-home-circle",
+      "slug": "hr",
+      "submenu": [
+        {
+          "url": "#",
+          "name": "Employees",
+          "slug": "employees"
+        },
+        {
+          "url": "#",
+          "name": "Leaves",
+          "slug": "Leaves"
+        },
+        {
+          "url": "#",
+          "name": "Shift Roster",
+          "slug": "Shift Roster"
+        },
+        {
+          "url": "#",
+          "name": "Attendance",
+          "slug": "Attendance"
+        },
+        {
+          "url": "#",
+          "name": "Holiday",
+          "slug": "Holiday"
+        },
+        {
+          "url": "#",
+          "name": "Designation",
+          "slug": "Designation"
+        },
+        {
+          "url": "#",
+          "name": "Department",
+          "slug": "Department"
+        },
+        {
+          "url": "#",
+          "name": "Appreciation",
+          "slug": "Appreciation"
+        }
+      ]
+    },
+    {
+      "name": "Work",
+      "icon": "menu-icon tf-icons bx bx-briefcase",
+      "slug": "dashboard",
+      "submenu": [
+        {
+          "url": "/#",
+          "name": "Contacts",
+          "slug": "Contacts"
+        },
+        {
+          "url": "/#",
+          "name": "Projects",
+          "slug": "Projects"
+        },
+        {
+          "url": "/#",
+          "name": "Tasks",
+          "slug": "Tasks"
+        },
+        {
+          "url": "/#",
+          "name": "Timesheet",
+          "slug": "Timesheet"
+        }
+      ]
+    },
+    {
+      "name": "Finance",
+      "icon": "menu-icon tf-icons bx bx-dollar-circle",
+        "slug": "hr",
+      "submenu": [
+        {
+          "url": "#",
+          "name": "Proposal",
+          "slug": "Proposal"
+        },
+        {
+          "url": "#",
+          "name": "Estimates",
+          "slug": "Estimates"
+        },
+        {
+          "url": "#",
+          "name": "invoices",
+          "slug": "invoices"
+        },
+        {
+          "url": "#",
+          "name": "Payments",
+          "slug": "Payments"
+        },
+        {
+          "url": "#",
+          "name": "Credit Note",
+          "slug": "Credit Note"
+        },
+        {
+          "url": "#",
+          "name": "Expenses",
+          "slug": "Expenses"
+        },
+        {
+          "url": "#",
+          "name": "Bank Account",
+          "slug": "Bank Account"
+        }
+      ]
+    },
+    {
+      "url": "/#",
+      "icon": "menu-icon tf-icons bx bx-cart",
+      "name": "Order",
+      "slug": "Order"
+    },
+    {
+      "url": "/#",
+      "icon": "menu-icon tf-icons bx bx-paste",
+      "name": "Tickets",
+      "slug": "Tickets"
+    },
+    {
+      "url": "/#",
+      "icon": "menu-icon tf-icons bx bx-calendar-event",
+      "name": "Events",
+      "slug": "Events"
+    },
+    {
+      "url": "/#",
+      "icon": "menu-icon tf-icons bx bx-chat",
+      "name": "Messages",
+      "slug": "Messages"
+    },
+    {
+      "url": "/#",
+      "icon": "menu-icon tf-icons bx bx-file",
+      "name": "Notice Borad",
+      "slug": "Notice Borad"
+    },
+    {
+      "url": "/#",
+      "icon": "menu-icon tf-icons bx bx-file",
+      "name": "Knowledge Base",
+      "slug": "Knowledge-Base"
+    },
+    {
+      "name": "Reports",
+      "icon": "menu-icon tf-icons bx bx-home-circle",
+      "slug": "hr",
+      "submenu": [
+        {
+          "url": "#",
+          "name": "Task Report",
+          "slug": "Task Report"
+        },
+        {
+          "url": "#",
+          "name": "Time Log Report",
+          "slug": "Time Log Report"
+        },
+        {
+          "url": "#",
+          "name": "Finance Report",
+          "slug": "Finance Report"
+        },
+        {
+          "url": "#",
+          "name": "Income Vs Expense",
+          "slug": "Income Vs Expense"
+        },
+        {
+          "url": "#",
+          "name": "Leave Report",
+          "slug": "Leave Report"
+        },
+        {
+          "url": "#",
+          "name": "Attendance Report",
+          "slug": "Attendance Report"
+        },
+        {
+          "url": "#",
+          "name": "Expenses Report",
+          "slug": "Expenses Report"
+        },
+        {
+          "url": "#",
+          "name": "Lead Report",
+          "slug": "Lead Report"
+        },
+        {
+          "url": "#",
+          "name": "Sale Report",
+          "slug": "Sale Report"
+        }
+      ]
+    },
+    {
+      "url": "/#",
+      "icon": "menu-icon tf-icons bx bx-file",
+      "name": "Settings",
+      "slug": "Settings"
     }
   ]
 }

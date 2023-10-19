@@ -5,7 +5,7 @@ use Illuminate\Support\ServiceProvider;
 
 return [
 
-  /*
+    /*
     |--------------------------------------------------------------------------
     | Application Name
     |--------------------------------------------------------------------------
@@ -16,9 +16,37 @@ return [
     |
     */
 
-  'name' => env('APP_NAME', 'Laravel'),
+    // This will determine if the application worksuite or worksuite-saas
+    'app_name' => 'worksuite',
 
-  /*
+    'name' => 'Worksuite',
+    /*
+    |--------------------------------------------------------------------------
+    | Application Name
+    |--------------------------------------------------------------------------
+    |
+    | This value is the name of your application. This value is used when the
+    | framework needs to place the application's name in a notification or
+    | any other location as required by the application or its packages.
+    |
+    */
+
+    'app_configuration_mode' => env('APP_CONFIGURATION_MODE', 'browser'),
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Seeding
+    |--------------------------------------------------------------------------
+    | This tells if the data is seeding  (php artisan db:seed)
+    |
+    */
+
+    'seeding' => false,
+    'redirect_https' => env('REDIRECT_HTTPS', false),
+    'seed_record_count' => env('SEED_RECORD_COUNT', 5),
+    'extra_company_seed_count' => env('EXTRA_COMPANY_SEED_COUNT', 0),
+    /*
     |--------------------------------------------------------------------------
     | Application Environment
     |--------------------------------------------------------------------------
@@ -29,9 +57,11 @@ return [
     |
     */
 
-  'env' => env('APP_ENV', 'production'),
+    'env' => env('APP_ENV', 'production'),
 
-  /*
+    'currency_converter_key' => env('CURRENCY_CONVERTER_KEY'),
+
+    /*
     |--------------------------------------------------------------------------
     | Application Debug Mode
     |--------------------------------------------------------------------------
@@ -42,9 +72,21 @@ return [
     |
     */
 
-  'debug' => (bool) env('APP_DEBUG', false),
+    'debug' => (bool)env('APP_DEBUG', false),
 
-  /*
+    /*
+        |--------------------------------------------------------------------------
+        | API Debug Mode
+        |--------------------------------------------------------------------------
+        |
+        | When your application is in debug mode, detailed error messages with
+        | stack traces will be shown on every error that occurs within your
+        | application. If disabled, a simple generic error page is shown.
+        |
+        */
+    'api_debug' => env('APP_API_DEBUG', false),
+
+    /*
     |--------------------------------------------------------------------------
     | Application URL
     |--------------------------------------------------------------------------
@@ -55,11 +97,11 @@ return [
     |
     */
 
-  'url' => env('APP_URL', 'http://localhost'),
+    'url' => env('APP_URL', 'http://localhost'),
 
-  'asset_url' => env('ASSET_URL'),
+    'asset_url' => env('ASSET_URL', null),
 
-  /*
+    /*
     |--------------------------------------------------------------------------
     | Application Timezone
     |--------------------------------------------------------------------------
@@ -70,9 +112,10 @@ return [
     |
     */
 
-  'timezone' => 'UTC',
+    'timezone' => env('DB_TIMEZONE', 'UTC'),
+    'cron_timezone' => env('CRON_TIMEZONE', 'UTC'),
 
-  /*
+    /*
     |--------------------------------------------------------------------------
     | Application Locale Configuration
     |--------------------------------------------------------------------------
@@ -83,9 +126,9 @@ return [
     |
     */
 
-  'locale' => 'en',
+    'locale' => env('APP_LOCALE', 'en'),
 
-  /*
+    /*
     |--------------------------------------------------------------------------
     | Application Fallback Locale
     |--------------------------------------------------------------------------
@@ -96,9 +139,9 @@ return [
     |
     */
 
-  'fallback_locale' => 'en',
+    'fallback_locale' => 'en',
 
-  /*
+    /*
     |--------------------------------------------------------------------------
     | Faker Locale
     |--------------------------------------------------------------------------
@@ -109,9 +152,9 @@ return [
     |
     */
 
-  'faker_locale' => 'en_US',
+    'faker_locale' => 'en_US',
 
-  /*
+    /*
     |--------------------------------------------------------------------------
     | Encryption Key
     |--------------------------------------------------------------------------
@@ -122,11 +165,11 @@ return [
     |
     */
 
-  'key' => env('APP_KEY'),
 
-  'cipher' => 'AES-256-CBC',
+    'key' => env('APP_KEY'),
 
-  /*
+    'cipher' => 'AES-256-CBC',
+    /*
     |--------------------------------------------------------------------------
     | Maintenance Mode Driver
     |--------------------------------------------------------------------------
@@ -139,12 +182,11 @@ return [
     |
     */
 
-  'maintenance' => [
-    'driver' => 'file',
-    // 'store'  => 'redis',
-  ],
+    'maintenance' => [
+        'driver' => 'file',
+    ],
 
-  /*
+    /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers
     |--------------------------------------------------------------------------
@@ -155,36 +197,106 @@ return [
     |
     */
 
-  'providers' => ServiceProvider::defaultProviders()->merge([
-    /*
+
+    'providers' => [
+
+        /*
+         * Laravel Framework Service Providers...
+         */
+        Illuminate\Auth\AuthServiceProvider::class,
+        Illuminate\Broadcasting\BroadcastServiceProvider::class,
+        Illuminate\Bus\BusServiceProvider::class,
+        Illuminate\Cache\CacheServiceProvider::class,
+        Illuminate\Foundation\Providers\ConsoleSupportServiceProvider::class,
+        Illuminate\Cookie\CookieServiceProvider::class,
+        Illuminate\Database\DatabaseServiceProvider::class,
+        Illuminate\Encryption\EncryptionServiceProvider::class,
+        Illuminate\Filesystem\FilesystemServiceProvider::class,
+        Illuminate\Foundation\Providers\FoundationServiceProvider::class,
+        Illuminate\Hashing\HashServiceProvider::class,
+        \App\Providers\SessionDriverConfigProvider::class,
+        Illuminate\Notifications\NotificationServiceProvider::class,
+        Illuminate\Pagination\PaginationServiceProvider::class,
+        Illuminate\Pipeline\PipelineServiceProvider::class,
+        Illuminate\Queue\QueueServiceProvider::class,
+        Illuminate\Redis\RedisServiceProvider::class,
+        Illuminate\Auth\Passwords\PasswordResetServiceProvider::class,
+        Illuminate\Session\SessionServiceProvider::class,
+        Illuminate\Translation\TranslationServiceProvider::class,
+        Illuminate\Validation\ValidationServiceProvider::class,
+        Illuminate\View\ViewServiceProvider::class,
+        \App\Providers\TranslateSettingConfigProvider::class,
+        \Illuminate\Mail\MailServiceProvider::class,
+        \App\Providers\FileStorageCustomConfigProvider::class,
+        \App\Providers\SmtpConfigProvider::class,
+
+        /*
          * Package Service Providers...
          */
 
-    /*
+        /*
          * Application Service Providers...
          */
-    App\Providers\AppServiceProvider::class,
-    App\Providers\AuthServiceProvider::class,
-    // App\Providers\BroadcastServiceProvider::class,
-    App\Providers\EventServiceProvider::class,
-    App\Providers\RouteServiceProvider::class,
-    App\Providers\MenuServiceProvider::class,
-  ])->toArray(),
+        App\Providers\AppServiceProvider::class,
+        App\Providers\AuthServiceProvider::class,
+        App\Providers\BroadcastServiceProvider::class,
+        App\Providers\EventServiceProvider::class,
+        App\Providers\RouteServiceProvider::class,
+        Froiden\RestAPI\Providers\ApiServiceProvider::class,
+        App\Providers\FortifyServiceProvider::class,
+        Barryvdh\TranslationManager\ManagerServiceProvider::class,
+        Macellan\Zip\ZipServiceProvider::class,
+        Froiden\LaravelInstaller\Providers\LaravelInstallerServiceProvider::class,
+        App\Providers\MenuServiceProvider::class,
+    ],
 
-  /*
+    /*
     |--------------------------------------------------------------------------
     | Class Aliases
     |--------------------------------------------------------------------------
     |
     | This array of class aliases will be registered when this application
     | is started. However, feel free to register as many as you wish as
-    | the aliases are "lazy" loaded so they don't hinder performance.
+    | the aliases are "lazy" loaded, so they don't hinder performance.
     |
     */
 
-  'aliases' => Facade::defaultAliases()->merge([
-    // 'Example' => App\Facades\Example::class,
-    'Helper' => App\Helpers\Helpers::class,
-  ])->toArray(),
+    'aliases' => Facade::defaultAliases()->merge([
+        'ApiRoute' => Froiden\RestAPI\Facades\ApiRoute::class,
+        'DataTables' => Yajra\DataTables\Facades\DataTables::class,
+        'Zip' => Macellan\Zip\ZipFacade::class,
+        'Helper' => App\Helper\Helpers::class,
+    ])->toArray(),
+
+    'debug_blacklist' => [
+        '_ENV' => [
+            'APP_KEY',
+            'DB_PASSWORD',
+            'REDIS_PASSWORD',
+            'MAIL_PASSWORD',
+            'PUSHER_APP_KEY',
+            'PUSHER_APP_SECRET',
+            'FTP_PASSWORD',
+            'RAZORPAY_SECRET',
+            'AWS_ACCESS_KEY_ID',
+            'AWS_SECRET_ACCESS_KEY'
+        ],
+        '_SERVER' => [
+            'APP_KEY',
+            'DB_PASSWORD',
+            'REDIS_PASSWORD',
+            'MAIL_PASSWORD',
+            'PUSHER_APP_KEY',
+            'PUSHER_APP_SECRET',
+            'FTP_PASSWORD',
+            'RAZORPAY_SECRET',
+            'AWS_ACCESS_KEY_ID',
+            'AWS_SECRET_ACCESS_KEY'
+
+        ],
+        '_POST' => [
+            'password',
+        ],
+    ],
 
 ];
