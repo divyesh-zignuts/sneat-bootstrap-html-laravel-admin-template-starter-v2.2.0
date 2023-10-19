@@ -60,7 +60,7 @@
         <!-- WELOCOME NAME START -->
         <div class="d-flex justify-content-between pb-2">
             <div>
-                <h3 class="heading-h3 mb-0 f-21 font-weight-bold">@lang('app.welcome') Divyesh</h3>
+                <h3 class="heading-h3 mb-0 f-21 font-weight-bold">@lang('app.welcome') {{ $user->name }}</h3>
             </div>
             <!-- WELOCOME NAME END -->
 
@@ -69,16 +69,29 @@
                 <p class="mb-0 text-lg-right text-md-right f-18 font-weight-bold text-dark-grey d-grid align-items-center">
                     <input type="hidden" id="current-latitude" name="current_latitude">
                     <input type="hidden" id="current-longitude" name="current_longitude">
-                    <span id="dashboard-clock">03:55 pm</span><span class="f-10 font-weight-normal">Wednesday</span>
+                    <span
+                        id="dashboard-clock">{{ now()->timezone(company()->timezone)->translatedFormat(company()->time_format) }}</span><span
+                        class="f-10 font-weight-normal">{{ now()->timezone(company()->timezone)->translatedFormat('l') }}</span>
                 </p>
                 <div>
-                    <span class="f-11 font-weight-normal mr-4">
-                        @lang('app.clockInAt') -
-                        10:00 AM
-                    </span>
-                    <button type="button" class="btn btn-danger">
-                        <span class="tf-icons bx bx-pie-chart-alt me-1"></span>@lang('modules.attendance.clock_in')
-                    </button>
+                    @if (!is_null($currentClockIn))
+                        <span class="f-11 font-weight-normal text-lightest">
+                            @lang('app.clockInAt') -
+                            {{ $currentClockIn->clock_in_time->timezone(company()->timezone)->translatedFormat(company()->time_format) }}
+                        </span>
+                    @endif
+
+                    @if (in_array('attendance', user_modules()) && $cannotLogin == false)
+                        @if (is_null($currentClockIn) && is_null($checkTodayLeave) && is_null($checkTodayHoliday) && $checkJoiningDate == true)
+                            <button type="button" class="btn-primary" id="clock-in"><i
+                                    class="tf-icons bx bx-pie-chart-alt me-1"></i>@lang('modules.attendance.clock_in')</button>
+                        @endif
+                    @endif
+
+                    @if (!is_null($currentClockIn) && is_null($currentClockIn->clock_out_time))
+                        <button type="button" class="btn-danger" id="clock-out"><i
+                                class="tf-icons bx bx-pie-chart-alt me-1"></i>@lang('modules.attendance.clock_out')</button>
+                    @endif
                 </div>
                 </p>
             </div>
@@ -88,18 +101,29 @@
                 <div class="d-flex align-items-end row">
                     <div class="col-8">
                         <div class="card-body">
-                            <h6 class="card-title mb-1 text-nowrap">Divyesh</h6>
-                            <small class="d-block mb-3 text-nowrap">Employee Id: 1</small>
+                            <h6 class="card-title mb-1 text-nowrap">{{ $user->name }}</h6>
+                            <small
+                                class="d-block mb-3 text-nowrap">{{ $user->employeeDetails->designation->name ?? '--' }}</small>
+                            <small class="d-block mb-3 text-nowrap"> @lang('app.employeeId') :
+                                {{ $user->employeeDetails->employee_id }}</small>
                             <h5 class="card-title text-primary mb-1"></h5>
                             <small class="d-block mb-4 pb-1 text-muted"></small>
-                            <small class="d-block mb-3 text-nowrap">Open Tasks:</small>
-                            <h3><a href="javascript:">0</a></h3>
+                            @if (in_array('tasks', user_modules()))
+                                <small class="d-block mb-3 text-nowrap"> @lang('app.open') @lang('app.menu.tasks') :</small>
+                                <h3><a href="{{ route('tasks.index') . '?assignee=me' }}">{{ $inProcessTasks }}</a></h3>
+                            @endif
                         </div>
                     </div>
                     <div class="col-4">
                         <div class="card-body">
-                            <small class="d-block mb-3 text-nowrap">Projects:</small>
-                            <h3><a href="javascript:">0</a></h3>
+                            @if (in_array('projects', user_modules()))
+                                <small class="d-block mb-3 text-nowrap"> @lang('app.open') @lang('app.menu.tasks') :</small>
+                                <h3><a href="{{ route('projects.index') . '?assignee=me&status=all' }}">{{ $totalProjects }}</a></h3>
+                            @endif
+                            @if (isset($totalOpenTickets) && in_array('tickets', user_modules()))
+                                <small class="d-block mb-3 text-nowrap"> @lang('modules.dashboard.totalOpenTickets') :</small>
+                                <h3><a href="{{ route('projects.index') . '?assignee=me&status=all' }}">{{ $totalOpenTickets }}</a></h3>
+                            @endif
                         </div>
                     </div>
                 </div>

@@ -493,7 +493,6 @@ trait EmployeeDashboard
                 ->first();
         }
 
-        return view('content.pages.dashboard.employee.index');
         return view('content.pages.dashboard.employee.index', $this->data);
     }
 
