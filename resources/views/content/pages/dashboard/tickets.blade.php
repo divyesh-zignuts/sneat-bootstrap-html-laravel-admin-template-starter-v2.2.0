@@ -20,10 +20,10 @@
                         <td>
                             <div class="media align-items-center">
                                 <div class="media-body">
-                                    <h5 class="f-12 mb-1 text-darkest-grey">
+                                    <p class="f-12 mb-1 text-darkest-grey">
                                         <a
-                                            href="{{ route('tickets.show', [$ticket->ticket_number]) }}">{{ $ticket->subject }}</a>
-                                    </h5>
+                                            href="{{ route('tickets.show', [$ticket->ticket_number]) }}">{{ $ticket->subject }}hello</a>
+                                    </p>
                                 </div>
                             </div>
                         </td>
@@ -35,13 +35,13 @@
                             @endif
                             {{ $ticket->status }}
                         </td>
-                        <td class="pr-20" align="right">
+                        <td class="pr-20">
                             <span>{{ $ticket->updated_at->translatedFormat(company()->date_format) }}</span>
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="4" class="shadow-none">
+                        <td colspan="4" class="shadow-none border-0">
                             <div class="align-items-center d-flex flex-column">
                                 <i class="bx bx-data"></i>
                                 <div class="f-15 mt-4">

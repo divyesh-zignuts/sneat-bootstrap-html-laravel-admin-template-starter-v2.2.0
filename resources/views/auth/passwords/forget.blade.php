@@ -1,15 +1,14 @@
 @php
+    $configData = Helper::appClasses();
     $customizerHidden = 'customizer-hide';
     $loginPage = true;
 @endphp
+
 @extends('layouts/layoutMaster')
 
-@section('title', 'Forgot Password Basic - Pages')
+@section('title', 'Forgot Password Cover - Pages')
 
 @section('vendor-style')
-
-    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/toastr/toastr.css') }}" />
-    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/animate-css/animate.css') }}" />
     <!-- Vendor -->
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/@form-validation/umd/styles/index.min.css') }}" />
 @endsection
@@ -20,9 +19,6 @@
 @endsection
 
 @section('vendor-script')
-
-    <script src="{{ asset('assets/vendor/libs/toastr/toastr.js') }}"></script>
-
     <script src="{{ asset('assets/vendor/libs/@form-validation/umd/bundle/popular.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/@form-validation/umd/plugin-bootstrap5/index.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/@form-validation/umd/plugin-auto-focus/index.min.js') }}"></script>
@@ -48,7 +44,7 @@
                     $('#forgot-password-form')[0].reset();
                 },
                 error: function(response) {
-                  toastr.error(response.responseJSON.message,"Error");
+                    toastr.error(response.responseJSON.message, "Error");
                 }
             });
         });
@@ -56,15 +52,26 @@
 @endsection
 
 @section('content')
-    <div class="container-xxl">
-        <div class="authentication-wrapper authentication-basic container-p-y">
-            <div class="authentication-inner py-4">
+    <div class="authentication-wrapper authentication-cover">
+        <div class="authentication-inner row m-0">
 
-                <!-- Forgot Password -->
-                <div class="card">
-                    <div class="card-body">
-                        <!-- Logo -->
-                        <div class="app-brand justify-content-center">
+            <!-- /Left Text -->
+            <div class="d-none d-lg-flex col-lg-7 col-xl-8 align-items-center p-5">
+                <div class="w-100 d-flex justify-content-center">
+                    <img src="{{ asset('assets/img/illustrations/girl-unlock-password-' . $configData['style'] . '.png') }}"
+                        class="img-fluid" alt="Login image" width="600"
+                        data-app-dark-img="illustrations/girl-unlock-password-dark.png"
+                        data-app-light-img="illustrations/girl-unlock-password-light.png">
+                </div>
+            </div>
+            <!-- /Left Text -->
+
+            <!-- Forgot Password -->
+            <div class="d-flex col-12 col-lg-5 col-xl-4 align-items-center authentication-bg p-sm-5 p-4">
+                <div class="w-px-400 mx-auto">
+                    <!-- Logo -->
+                    <div class="app-brand mb-5">
+                        <a href="{{ url('/') }}" class="app-brand-link gap-2">
                             <a href="{{ url('/') }}" class="app-brand-link gap-2">
                                 <span class="app-brand-logo demo">@include('_partials.macros', [
                                     'width' => 25,
@@ -73,33 +80,32 @@
                                 <span
                                     class="app-brand-text demo text-body fw-bold">{{ config('variables.templateName') }}</span>
                             </a>
-                        </div>
-                        <!-- /Logo -->
-                        <h4 class="mb-2">Forgot Password? 🔒</h4>
-                        <p class="mb-4">Enter your email and we'll send you instructions to reset your password</p>
-                        <form id="forgot-password-form">
-                            @csrf
-                            <div class="alert alert-success m-t-10 d-none" id="success-msg"></div>
+                    </div>
+                    <!-- /Logo -->
+                    <h4 class="mb-2">Forgot Password? 🔒</h4>
+                    <p class="mb-4">Enter your email and we'll send you instructions to reset your password</p>
+                    <form id="forgot-password-form">
+                        @csrf
+                        <div class="alert alert-success m-t-10 d-none" id="success-msg"></div>
 
-                            <div class="group">
-                                <div class="mb-3">
-                                    <label for="email" class="form-label">Email</label>
-                                    <input type="text" class="form-control" id="email" name="email"
-                                        placeholder="Enter your email" autofocus>
-                                </div>
-                                <button class="btn btn-primary d-grid w-100" id="submit-login">Send Reset Link</button>
+                        <div class="group">
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="text" class="form-control" id="email" name="email"
+                                    placeholder="Enter your email" autofocus>
                             </div>
-                        </form>
-                        <div class="text-center">
-                            <a href="{{ url('/login') }}" class="d-flex align-items-center justify-content-center">
-                                <i class="bx bx-chevron-left scaleX-n1-rtl bx-sm"></i>
-                                Back to login
-                            </a>
+                            <button class="btn btn-primary d-grid w-100" id="submit-login">Send Reset Link</button>
                         </div>
+                    </form>
+                    <div class="text-center">
+                        <a href="{{ url('/login') }}" class="d-flex align-items-center justify-content-center">
+                            <i class="bx bx-chevron-left scaleX-n1-rtl bx-sm"></i>
+                            Back to login
+                        </a>
                     </div>
                 </div>
-                <!-- /Forgot Password -->
             </div>
+            <!-- /Forgot Password -->
         </div>
     </div>
 @endsection

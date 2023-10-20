@@ -43,7 +43,7 @@
                                 </td>
                             </tr>
                         @empty
-                            <span class="shadow-none">
+                            <span class="shadow-none border-0">
                                 <x-cards.no-record icon="objects-horizontal-center" :message="__('messages.noRecordFound')" />
                             </span>
                         @endforelse

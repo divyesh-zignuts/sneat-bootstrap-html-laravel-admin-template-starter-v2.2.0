@@ -14,11 +14,11 @@
                                 <x-employee :user="$appreciation->awardTo" />
                             </td>
                             <td class="text-right pr-20">
-                                <div class="d-flex justify-content-end" data-toggle="tooltip" data-original-title="">
+                                <div class="d-flex align-items-center justify-content-end gap-3" data-toggle="tooltip" data-original-title="">
                                     @if (isset($appreciation->award))
                                         <div class="ml-1 f-12 mr-3">
                                             <span
-                                                class="font-weight-semibold">{{ $appreciation->award->title }}</span><br>
+                                                class="font-weight-semibold">{{ $appreciation->award->title }}</span>
                                             {{ $appreciation->award_date->translatedFormat($company->date_format) }}
                                         </div>
                                     @endif
@@ -28,7 +28,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="3" class="shadow-none">
+                            <td class="shadow-none border-0">
                                 <x-cards.no-record icon="award" :message="__('messages.noRecordFound')" />
                             </td>
                         </tr>

@@ -23,10 +23,10 @@
                                         ->translatedFormat('d') }}</span>
                                   </div>
                                   <div class="card-body border-0 p-0 ml-3">
-                                      <h4 class="card-title f-14 font-weight-normal mb-0">
+                                      <p class="card-title  f-14 font-weight-normal mb-0">
                                           <a href="{{ route('notices.show', $notice->id) }}"
-                                              class="openRightModal text-darkest-grey">{{ $notice->heading }}</a>
-                                      </h4>
+                                              class="openRightModal text-black">{{ $notice->heading }}</a>
+                                      </p>
                                   </div>
                               </div>
                           </div><!-- card end -->

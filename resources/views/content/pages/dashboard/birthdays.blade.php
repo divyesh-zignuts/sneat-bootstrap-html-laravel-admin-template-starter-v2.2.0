@@ -6,7 +6,7 @@
                 <tbody>
                     @forelse ($upcomingBirthdays as $upcomingBirthday)
                         <tr>
-                            <td class="pl-20">
+                            <td>
                                 <x-employee :user="$upcomingBirthday->user" />
                             </td>
                             <td>
@@ -15,7 +15,7 @@
                                     {{ $upcomingBirthday->date_of_birth->translatedFormat('d M') }}
                                 </span>
                             </td>
-                            <td class="pr-20" align="right">
+                            <td class="pr-20 border-0">
                                 @php
                                     $currentYear = now(company()->timezone)->year;
                                     $year = $upcomingBirthday->date_of_birth->timezone(company()->timezone)->year(date('Y'));
@@ -39,7 +39,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td class="shadow-none">
+                            <td class="shadow-none border-0">
                               <x-cards.no-record icon="cake" :message="__('messages.noRecordFound')"/>
                             </td>
                         </tr>

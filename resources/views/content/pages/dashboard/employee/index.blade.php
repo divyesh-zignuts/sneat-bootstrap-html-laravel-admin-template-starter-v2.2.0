@@ -1,3 +1,7 @@
+@php
+    $configData = Helper::appClasses();
+@endphp
+
 @extends('layouts/layoutMaster')
 
 @section('title', 'Dashboard')
@@ -35,6 +39,184 @@
 
     <script src="{{ asset('assets/js/app-calendar-events.js') }}"></script>
     <script src="{{ asset('assets/js/app-calendar.js') }}"></script>
+
+
+    <script>
+        var initialLocaleCode = '{{ user()->locale }}';
+        var calendarEl = document.getElementById('calendar');
+
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            locale: initialLocaleCode,
+            timeZone: '{{ company()->timezone }}',
+            firstDay: parseInt("{{ attendance_setting()?->week_start_from }}"),
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+            },
+            navLinks: true, // can click day/week names to navigate views
+            selectable: false,
+            initialView: 'listWeek',
+            selectMirror: true,
+            select: function(arg) {
+                addEventModal(arg.start, arg.end, arg.allDay);
+                calendar.unselect()
+            },
+            eventClick: function(arg) {
+                getEventDetail(arg.event.id, arg.event.extendedProps.event_type);
+            },
+            editable: false,
+            dayMaxEvents: true, // allow "more" link when too many events
+            events: {
+                url: "{{ route('dashboard.private_calendar') }}",
+            },
+            eventDidMount: function(info) {
+                $(info.el).css('background-color', info.event.extendedProps.bg_color);
+                $(info.el).css('color', info.event.extendedProps.color);
+                $(info.el).find('td.fc-list-event-title').prepend('<i class="fa ' + info.event.extendedProps
+                    .icon + '"></i>&nbsp;&nbsp;');
+                // tooltip for leaves
+                if (info.event.extendedProps.event_type == 'leave') {
+                    $(info.el).find('td.fc-list-event-title > a').css('cursor',
+                        'default'); // list view cursor for leave
+                    $(info.el).css('cursor', 'default')
+                    $(info.el).tooltip({
+                        title: info.event.extendedProps.name,
+                        container: 'body',
+                        delay: {
+                            "show": 50,
+                            "hide": 50
+                        }
+                    });
+                }
+            },
+            eventTimeFormat: { // like '14:30:00'
+                hour: company.time_format == 'H:i' ? '2-digit' : 'numeric',
+                minute: '2-digit',
+                meridiem: company.time_format == 'H:i' ? false : true
+            }
+        });
+
+        if (calendarEl != null) {
+            calendar.render();
+        }
+
+        // Task Detail show in sidebar
+        var getEventDetail = function(id, type) {
+            if (type == 'ticket') {
+                var url = "{{ route('tickets.show', ':id') }}";
+                url = url.replace(':id', id);
+                window.location = url;
+                return true;
+            }
+
+            if (type == 'leave') {
+                return true;
+            }
+
+            openTaskDetail();
+
+            switch (type) {
+                case 'task':
+                    var url = "{{ route('tasks.show', ':id') }}";
+                    break;
+                case 'event':
+                    var url = "{{ route('events.show', ':id') }}";
+                    break;
+                case 'holiday':
+                    var url = "{{ route('holidays.show', ':id') }}";
+                    break;
+                case 'leave':
+                    var url = "{{ route('leaves.show', ':id') }}";
+                    break;
+                default:
+                    return 0;
+                    break;
+            }
+
+            url = url.replace(':id', id);
+
+            $.ajax({
+                method: "POST",
+                url: url,
+                blockUI: true,
+                container: RIGHT_MODAL,
+                historyPush: true,
+                success: function(response) {
+                    if (response.status == "success") {
+                        $(RIGHT_MODAL_CONTENT).html(response.html);
+                        $(RIGHT_MODAL_TITLE).html(response.title);
+                    }
+                },
+                error: function(request, status, error) {
+                    if (request.status == 403) {
+                        $(RIGHT_MODAL_CONTENT).html(
+                            '<div class="align-content-between d-flex justify-content-center mt-105 f-21">403 | Permission Denied</div>'
+                        );
+                    } else if (request.status == 404) {
+                        $(RIGHT_MODAL_CONTENT).html(
+                            '<div class="align-content-between d-flex justify-content-center mt-105 f-21">404 | Not Found</div>'
+                        );
+                    } else if (request.status == 500) {
+                        $(RIGHT_MODAL_CONTENT).html(
+                            '<div class="align-content-between d-flex justify-content-center mt-105 f-21">500 | Something Went Wrong</div>'
+                        );
+                    }
+                }
+            });
+
+        };
+
+        // calendar filter
+        var hideDropdown = false;
+
+        $('#event-btn').click(function() {
+            if (hideDropdown == true) {
+                $('#cal-drop').hide();
+                hideDropdown = false;
+            } else {
+                $('#cal-drop').toggle();
+                hideDropdown = true;
+            }
+        });
+
+
+        $(document).mouseup(e => {
+
+            const $menu = $('.calendar-action');
+
+            if (!$menu.is(e.target) && $menu.has(e.target).length === 0) {
+                hideDropdown = false;
+                $('#cal-drop').hide();
+            }
+        });
+
+
+        $('.cal-filter').on('click', function() {
+
+            var filter = [];
+
+            $('.filter-check:checked').each(function() {
+                filter.push($(this).val());
+            });
+
+            if (filter.length < 1) {
+                filter.push('None');
+            }
+
+            calendar.removeAllEventSources();
+            calendar.addEventSource({
+                url: "{{ route('dashboard.private_calendar') }}",
+                extraParams: {
+                    filter: filter
+                }
+            });
+
+            filter = null;
+        });
+    </script>
+
+
 @endsection
 
 @section('content')
@@ -96,7 +278,7 @@
                 </p>
             </div>
         </div>
-        <div class="col-md-12 col-lg-4 mb-4">
+        {{-- <div class="col-md-12 col-lg-4 mb-4">
             <div class="card">
                 <div class="d-flex align-items-end row">
                     <div class="col-8">
@@ -118,23 +300,70 @@
                         <div class="card-body">
                             @if (in_array('projects', user_modules()))
                                 <small class="d-block mb-3 text-nowrap"> @lang('app.open') @lang('app.menu.tasks') :</small>
-                                <h3><a href="{{ route('projects.index') . '?assignee=me&status=all' }}">{{ $totalProjects }}</a></h3>
+                                <h3><a
+                                        href="{{ route('projects.index') . '?assignee=me&status=all' }}">{{ $totalProjects }}</a>
+                                </h3>
                             @endif
                             @if (isset($totalOpenTickets) && in_array('tickets', user_modules()))
                                 <small class="d-block mb-3 text-nowrap"> @lang('modules.dashboard.totalOpenTickets') :</small>
-                                <h3><a href="{{ route('projects.index') . '?assignee=me&status=all' }}">{{ $totalOpenTickets }}</a></h3>
+                                <h3><a
+                                        href="{{ route('projects.index') . '?assignee=me&status=all' }}">{{ $totalOpenTickets }}</a>
+                                </h3>
                             @endif
                         </div>
                     </div>
                 </div>
             </div>
+        </div> --}}
+        <div class="col-md-12 col-lg-4 mb-4">
+            <div class="card">
+                <div class="d-flex align-items-end row">
+                    <div class="col-12">
+                        <div class="card-body">
+                            <h6 class="card-title mb-1 text-nowrap">{{ $user->name }}</h6>
+                            <small
+                                class="d-block mb-3 text-nowrap">{{ $user->employeeDetails->designation->name ?? '--' }}</small>
+                            <small class="d-block mb-3 text-nowrap"> @lang('app.employeeId') :
+                                {{ $user->employeeDetails->employee_id }}</small>
+                            <h5 class="card-title text-primary mb-1"></h5>
+                            <small class="d-block mb-4 pb-1 text-muted"></small>
+                            <div class="d-flex justify-content-between flex-wrap gap-2">
+                                @if (in_array('tasks', user_modules()))
+                                    <div>
+                                        <small class="d-block flex-wrap  mb-3 text-nowrap"> @lang('app.open')
+                                            @lang('app.menu.tasks'):</small>
+                                        <h3><a
+                                                href="{{ route('tasks.index') . '?assignee=me' }}">{{ $inProcessTasks }}</a>
+                                        </h3>
+                                    </div>
+                                @endif
+                                @if (in_array('projects', user_modules()))
+                                <div>
+                                    <small class="d-block mb-3 text-nowrap"> @lang('app.menu.projects') :</small>
+                                    <h3><a href="{{ route('projects.index') . '?assignee=me&status=all' }}">{{ $totalProjects }}</a>
+                                    </h3>
+                                </div>
+                                @endif
+                                @if (isset($totalOpenTickets) && in_array('tickets', user_modules()))
+                                <div>
+                                    <small class="d-block mb-3 text-nowrap"> @lang('modules.dashboard.totalOpenTickets')  :</small>
+                                    <h3><a href="{{ route('projects.index') . '?assignee=me&status=all' }}">{{ $totalOpenTickets }}</a>
+                                    </h3>
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         </div>
         <!-- task & project-->
 
-        <div class="col-lg-8 mb-4">
+        <div class="col-lg-4 mb-4">
             <div class="card h-100">
                 <div class="card-body row g-4">
-                    <div class="col-md-6 pe-md-4 card-separator">
+                    <div class="col-md-6 pe-md-4 ">
                         <div class="card-title d-flex align-items-start justify-content-between">
                             <h5 class="mb-0">Task</h5>
                             <small></small>
@@ -150,7 +379,21 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6 ps-md-4">
+                    <div class="col-sm-5 text-center text-sm-left">
+                        <div class="card-body pb-0 px-0 px-md-4">
+                            <img src="{{ asset('assets/img/illustrations/man-with-laptop-' . $configData['style'] . '.png') }}"
+                                height="140" alt="View Badge User"
+                                data-app-light-img="illustrations/man-with-laptop-light.png"
+                                data-app-dark-img="illustrations/man-with-laptop-dark.png">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body row g-4">
+                    <div class="col-md-6">
                         <div class="card-title d-flex align-items-start justify-content-between">
                             <h5 class="mb-0">Projects</h5>
                             <small></small>
@@ -165,6 +408,11 @@
                                 <small>Overdue</small>
                             </div>
                         </div>
+                    </div>
+                    <div class="d-md-block col-md-6">
+                      <div class="mt-5">
+                        <img src="{{asset('assets/img/illustrations/sitting-girl-with-laptop-'.$configData['style'].'.png')}}" class="img-fluid w-px-200" alt="FAQ Image" data-app-light-img="illustrations/sitting-girl-with-laptop-light.png" data-app-dark-img="illustrations/sitting-girl-with-laptop-dark.png">
+                      </div>
                     </div>
                 </div>
             </div>
@@ -191,9 +439,11 @@
 
             @include('content.pages.dashboard.contract-date')
 
-
         </div>
         <div class="col-12 col-lg-6">
+
+            @include('content.pages.dashboard.week-timelog')
+
             @include('content.pages.dashboard.my-task')
 
             @include('content.pages.dashboard.tickets')

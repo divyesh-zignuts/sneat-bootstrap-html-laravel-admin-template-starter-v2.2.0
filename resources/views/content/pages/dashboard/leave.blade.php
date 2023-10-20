@@ -30,7 +30,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="3" class="shadow-none">
+                            <td colspan="3" class="shadow-none border-0">
                                 <x-cards.no-record icon="bx bxs-plane-take-off" :message="__('messages.noRecordFound')" />
                             </td>
                         </tr>

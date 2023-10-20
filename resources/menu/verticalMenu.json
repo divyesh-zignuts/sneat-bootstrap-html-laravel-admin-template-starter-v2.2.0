@@ -79,7 +79,7 @@
     {
       "name": "Work",
       "icon": "menu-icon tf-icons bx bx-briefcase",
-      "slug": "dashboard",
+      "slug": "work",
       "submenu": [
         {
           "url": "/#",

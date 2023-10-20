@@ -11,7 +11,7 @@
                     <x-employee :user="$totalWorkFromHome->user" />
                 </div>
             @empty
-                <p class="shadow-none">
+                <p class="shadow-none ">
                     <x-cards.no-record icon="home" :message="__('messages.noRecordFound')" />
                 </p>
             @endforelse
