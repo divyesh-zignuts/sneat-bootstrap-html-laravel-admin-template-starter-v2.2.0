@@ -135,7 +135,6 @@ class RegisterController extends Controller
      */
     public function setupAccount(AccountSetupRequest $request)
     {
-      dd('o');
         // Update company name
         $setting = Company::firstOrCreate();
         $setting->company_name = $request->company_name;

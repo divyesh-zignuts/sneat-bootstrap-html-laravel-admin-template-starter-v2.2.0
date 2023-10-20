@@ -1,16 +1,3 @@
-  {{-- <div class="card mt-4">
-    <div class="card-body">
-      <h5 class="card-title">Card title</h5>
-      <h6 class="card-subtitle text-muted">Support card subtitle</h6>
-    </div>
-    <div class="card-body">
-      <p class="card-text"></p>
-    </div>
-  </div> --}}
-
-
-
-
   @if (in_array('notices', $activeWidgets) &&
           $sidebarUserPermissions['view_notice'] != 5 &&
           $sidebarUserPermissions['view_notice'] != 'none' &&
@@ -29,9 +16,11 @@
                           <div class="card border-0 b-shadow-4 p-20 rounded-0">
                               <div class="card-horizontal">
                                   <div class="card-header m-0 p-0 bg-white rounded">
-                                      <x-date-badge :month="$notice->created_at->translatedFormat('M')" :date="$notice->created_at
-                                          ->timezone(company()->timezone)
-                                          ->translatedFormat('d')" />
+
+                                      <span class="f-12 p-1 ">{{$notice->created_at->translatedFormat('M') }}</span>
+                                      <span class="f-13 f-w-500 rounded-bottom">{{ $notice->created_at
+                                        ->timezone(company()->timezone)
+                                        ->translatedFormat('d') }}</span>
                                   </div>
                                   <div class="card-body border-0 p-0 ml-3">
                                       <h4 class="card-title f-14 font-weight-normal mb-0">
